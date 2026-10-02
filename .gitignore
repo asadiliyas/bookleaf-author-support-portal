@@ -41,10 +41,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local agent/editor instruction files (not part of the project)
-CLAUDE.md
-AGENTS.md
-.claude/
 
 # supabase cli local state
 supabase/.temp/
