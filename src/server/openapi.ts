@@ -276,7 +276,8 @@ export function buildOpenApiDocument(serverUrl: string) {
               type: "object",
               properties: {
                 state: { enum: ["not_published", "no_earnings", "paid_up", "below_threshold", "scheduled", "likely_overdue"] },
-                summary: { type: "string" },
+                summary: { type: "string", description: "Author-facing explanation" },
+                staffSummary: { type: "string", description: "Ops-facing explanation" },
                 meetsThreshold: { type: "boolean" },
                 upcomingCycle: { type: "string", example: "Q3 2026" },
                 upcomingDeadline: { type: "string", format: "date" },

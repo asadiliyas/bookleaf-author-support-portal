@@ -44,7 +44,8 @@ export function toBook(row: BookRow, asOf: Date = new Date()): Book {
     availableOn: row.available_on,
     royalty: {
       state: royalty.state,
-      summary: royalty.summary,
+      summary: royalty.authorMessage,
+      staffSummary: royalty.summary,
       meetsThreshold: royalty.meetsThreshold,
       upcomingCycle: royalty.calendar.upcoming.label,
       upcomingDeadline: isoDate(royalty.calendar.upcoming.deadline),

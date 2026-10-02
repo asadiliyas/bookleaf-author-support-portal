@@ -115,8 +115,10 @@ export interface RoyaltyAssessment {
   shortfallToThreshold: number;
   daysSinceLastPayout: number | null;
   calendar: RoyaltyCalendar;
-  /** Plain-English explanation used in the UI and in the AI facts block. */
+  /** Neutral explanation for the ops team and the AI facts block. */
   summary: string;
+  /** Friendly second-person version shown to the author. */
+  authorMessage: string;
 }
 
 /**
@@ -126,6 +128,30 @@ export interface RoyaltyAssessment {
  * recorded inside or after that cycle's payout window.
  */
 export function assessRoyalty(book: RoyaltyBookInput, asOf: Date = new Date()): RoyaltyAssessment {
+  const result = assessRoyaltyState(book, asOf);
+  return { ...result, authorMessage: authorMessageFor(result) };
+}
+
+function authorMessageFor(a: Omit<RoyaltyAssessment, "authorMessage">): string {
+  const pending = `₹${a.pending.toLocaleString("en-IN")}`;
+  const upcoming = `${a.calendar.upcoming.label} payout, due by ${formatLongDate(a.calendar.upcoming.deadline)}`;
+  switch (a.state) {
+    case "not_published":
+      return "Royalties start accruing once your book is published.";
+    case "no_earnings":
+      return `No royalties yet. They're calculated quarterly; the next is the ${upcoming}.`;
+    case "paid_up":
+      return "You're all paid up. New sales will show up here as they come in.";
+    case "below_threshold":
+      return `${pending} pending is below the ₹${ROYALTY_MIN_PAYOUT_INR.toLocaleString("en-IN")} minimum payout, so it rolls over to next quarter (₹${a.shortfallToThreshold.toLocaleString("en-IN")} to go).`;
+    case "scheduled":
+      return `${pending} pending will be included in the ${upcoming}.`;
+    case "likely_overdue":
+      return `${pending} pending should already have been paid in the ${a.calendar.lastPassed.label} cycle (by ${formatLongDate(a.calendar.lastPassed.deadline)}). Raise a request and we'll look into it right away.`;
+  }
+}
+
+function assessRoyaltyState(book: RoyaltyBookInput, asOf: Date): Omit<RoyaltyAssessment, "authorMessage"> {
   const calendar = royaltyCalendar(asOf);
   const pending = book.royaltyPending;
   const meetsThreshold = pending >= ROYALTY_MIN_PAYOUT_INR;

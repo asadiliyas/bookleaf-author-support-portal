@@ -41,7 +41,10 @@ export interface SessionResponse {
 
 export interface RoyaltyStatus {
   state: RoyaltyState;
+  /** Friendly, second person: shown to the author. */
   summary: string;
+  /** Neutral wording for the ops team. */
+  staffSummary: string;
   meetsThreshold: boolean;
   upcomingCycle: string;
   upcomingDeadline: string;
