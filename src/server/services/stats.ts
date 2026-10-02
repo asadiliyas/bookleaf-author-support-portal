@@ -4,6 +4,7 @@ import { UNRESOLVED_STATUSES } from "@/lib/domain/constants";
 import { firstResponseSla } from "@/lib/domain/sla";
 import { estimateCostUsd } from "../ai/pricing";
 import type { AuthContext } from "../auth/actor";
+import { systemDb } from "../db/clients";
 import { check, forbidden } from "../http/errors";
 
 export async function getQueueStats({ actor, db }: AuthContext): Promise<QueueStats> {
@@ -136,8 +137,10 @@ export async function getAiUsageStats({ actor, db }: AuthContext, windowDays = 3
   };
 }
 
-export async function listAdmins({ actor, db }: AuthContext): Promise<AdminUser[]> {
+export async function listAdmins({ actor }: AuthContext): Promise<AdminUser[]> {
   if (actor.role !== "admin") throw forbidden();
-  const rows = check(await db.from("admins").select("user_id, name, email").order("name"), "list admins");
+  // Emails are not readable through RLS (authors may only see admin names), so
+  // this admin-only directory reads with the system client after the role check.
+  const rows = check(await systemDb().from("admins").select("user_id, name, email").order("name"), "list admins");
   return rows.map((r) => ({ id: r.user_id, name: r.name, email: r.email }));
 }
