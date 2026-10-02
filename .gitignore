@@ -49,3 +49,7 @@ AGENTS.md
 # supabase cli local state
 supabase/.temp/
 supabase/.branches/
+
+# playwright
+/test-results/
+/playwright-report/
