@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: "Support and communication portal for BookLeaf Publishing authors and the BookLeaf operations team.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${lato.variable} h-full`}>
       <body className="min-h-full">
