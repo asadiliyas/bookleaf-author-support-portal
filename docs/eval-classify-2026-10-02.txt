@@ -1,0 +1,33 @@
+
+> bookleaf-author-support-portal@0.1.0 eval:classify
+> tsx --conditions=react-server --env-file=.env.local scripts/eval-classify.ts --models=gemini-3.1-flash-lite,gemini-3.5-flash-lite,gemini-2.5-flash-lite
+
+
+gemini-3.1-flash-lite
+  ✓✗ Own imprint ISBN                     → isbn_metadata/high  (expected isbn_metadata/low|medium)
+
+gemini-3.5-flash-lite
+
+gemini-2.5-flash-lite
+  !! Royalty breakdown by platform: Rate limited on gemini-2.5-flash-lite.
+  !! Two books share one ISBN: Rate limited on gemini-2.5-flash-lite.
+  !! Author name misspelt on Amazon: Rate limited on gemini-2.5-flash-lite.
+  !! Own imprint ISBN: Rate limited on gemini-2.5-flash-lite.
+  !! Order 50 copies for launch: Rate limited on gemini-2.5-flash-lite.
+  !! Cover colour looks wrong: Rate limited on gemini-2.5-flash-lite.
+  !! Not listed on Flipkart: Rate limited on gemini-2.5-flash-lite.
+  !! Listing not live after publication: Rate limited on gemini-2.5-flash-lite.
+  !! Cover approval: Rate limited on gemini-2.5-flash-lite.
+  !! Stuck for two months: Rate limited on gemini-2.5-flash-lite.
+  !! Update author bio: Rate limited on gemini-2.5-flash-lite.
+  !! Bestseller Breakthrough package: Rate limited on gemini-2.5-flash-lite.
+  !! Copyright concern: Rate limited on gemini-2.5-flash-lite.
+  !! Quick question: Rate limited on gemini-2.5-flash-lite.
+  !! Unavailable and royalty question: Rate limited on gemini-2.5-flash-lite.
+
+Results on 24 labelled tickets
+model                    | category | priority(exact) | priority(ok) | errors | p50 ms | avg in-tok | $/1k tickets
+gemini-3.1-flash-lite    |     100% |             79% |          96% |      0 |   1619 |        609 |       $0.238
+gemini-3.5-flash-lite    |     100% |             75% |         100% |      0 |   1341 |        609 |       $0.318
+gemini-2.5-flash-lite    |     100% |             78% |         100% |     15 |   1260 |        610 |       $0.083
+rule-based fallback      |      96% |             63% |          88% |      0 |      - |          - |       $0.000
