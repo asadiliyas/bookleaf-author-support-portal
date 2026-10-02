@@ -6,6 +6,7 @@ import {
   STAGE_LABELS,
   bookStatusLabel,
   stageIndex,
+  type TicketCategory,
 } from "@/lib/domain/constants";
 import { assessRoyalty, daysBetween, formatLongDate } from "@/lib/domain/royalty";
 import { inr } from "@/lib/format";
@@ -62,7 +63,7 @@ export function firstName(fullName: string): string {
 // Facts: computed in code, rendered as terse lines the model must treat as truth
 // ---------------------------------------------------------------------------
 
-function bookFacts(book: BookRow, asOf: Date): string[] {
+function bookFacts(book: BookRow, category: TicketCategory, asOf: Date): string[] {
   const published = book.stage === "published_live";
   const lines: string[] = [];
   lines.push(`Book: "${book.title}" (${book.genre}), ISBN ${book.isbn}`);
@@ -108,9 +109,11 @@ function bookFacts(book: BookRow, asOf: Date): string[] {
     `Royalty assessment [${royalty.state.toUpperCase()}]: ${royalty.summary}`,
   );
 
+  // Listing gaps only matter for distribution questions; elsewhere they tempt
+  // the model into raising issues the author never asked about.
   const missing = DISTRIBUTION_PLATFORMS.filter((p) => !book.available_on.includes(p));
   lines.push(
-    `Listed on: ${book.available_on.join(", ") || "none"}.${missing.length ? ` Not listed on: ${missing.join(", ")}.` : ""}`,
+    `Listed on: ${book.available_on.join(", ") || "none"}.${missing.length && category === "distribution_availability" ? ` Not listed on: ${missing.join(", ")}.` : ""}`,
     `Print partner: ${book.print_partner ?? "n/a"}.`,
   );
   return lines;
@@ -124,7 +127,7 @@ export function renderFacts(ctx: TicketAiContext, asOf: Date = new Date()): stri
   ];
 
   if (ctx.book) {
-    lines.push(...bookFacts(ctx.book, asOf));
+    lines.push(...bookFacts(ctx.book, ctx.ticket.category, asOf));
   } else {
     lines.push("Ticket is about: General / Account level (no specific book).");
     lines.push(`Author's books (${ctx.books.length}):`);

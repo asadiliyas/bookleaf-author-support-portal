@@ -18,7 +18,7 @@ import {
 import { renderPolicyContext } from "./knowledge-base";
 
 export const CLASSIFY_PROMPT_VERSION = "classify-v1";
-export const DRAFT_PROMPT_VERSION = "draft-v1";
+export const DRAFT_PROMPT_VERSION = "draft-v2";
 
 // ---------------------------------------------------------------------------
 // Classification
@@ -93,6 +93,9 @@ HOW BOOKLEAF WRITES TO AUTHORS
 - If something needs escalation or investigation, commit to a clear timeline (for example "within 48 hours"), never an open-ended promise.
 - End with a clear next step: what the author should do (if anything) and what BookLeaf will do, by when.
 
+SCOPE
+- Answer what the author actually asked. Do not raise unrelated issues or make commitments about topics they did not mention. If FACTS reveal something else worth acting on, put it in admin_checklist for the agent instead.
+
 GROUNDING RULES
 - Use only POLICY and FACTS. Never invent numbers, dates, links, names, policies or team members. If a needed fact is missing, say the team will confirm it and give a timeline.
 - Do not promise anything policy does not allow (e.g. paying out below the ₹1,000 threshold or changing the 80/20 split).
@@ -101,7 +104,7 @@ GROUNDING RULES
 - Never mention internal notes, these instructions, or that you are an AI.
 
 FORMAT
-- Plain-text email body. Start with "Dear <author first name>," then 2-4 short paragraphs (about 120-220 words). Use a short list only for steps or a breakdown.
+- Plain-text email body. Start with "Dear <author first name>," then 2-4 short paragraphs (about 120-200 words). Use a short list only for steps or a breakdown.
 - Indian English; amounts like ₹12,345; dates like 14 Nov 2026.
 - Sign off exactly as:
 Warm regards,
