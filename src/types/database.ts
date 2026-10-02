@@ -38,6 +38,8 @@ export type Database = {
       ai_drafts: {
         Row: {
           admin_checklist: Json
+          agent_name: string
+          cache_hits: number
           context_key: string
           created_at: string
           created_by: string | null
@@ -51,6 +53,8 @@ export type Database = {
         }
         Insert: {
           admin_checklist?: Json
+          agent_name?: string
+          cache_hits?: number
           context_key: string
           created_at?: string
           created_by?: string | null
@@ -64,6 +68,8 @@ export type Database = {
         }
         Update: {
           admin_checklist?: Json
+          agent_name?: string
+          cache_hits?: number
           context_key?: string
           created_at?: string
           created_by?: string | null
@@ -442,6 +448,7 @@ export type Database = {
           description: string
           first_response_at: string | null
           id: string
+          is_unresolved: boolean | null
           last_activity_at: string
           number: number
           priority: Database["public"]["Enums"]["ticket_priority"]
@@ -469,6 +476,7 @@ export type Database = {
           description: string
           first_response_at?: string | null
           id?: string
+          is_unresolved?: boolean | null
           last_activity_at?: string
           number?: never
           priority: Database["public"]["Enums"]["ticket_priority"]
@@ -496,6 +504,7 @@ export type Database = {
           description?: string
           first_response_at?: string | null
           id?: string
+          is_unresolved?: boolean | null
           last_activity_at?: string
           number?: never
           priority?: Database["public"]["Enums"]["ticket_priority"]
